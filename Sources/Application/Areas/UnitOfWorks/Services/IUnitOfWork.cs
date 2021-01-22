@@ -1,0 +1,17 @@
+﻿using System.Threading.Tasks;
+using Mmu.Mlh.EfDataAccess.Areas.Entities;
+using Mmu.Mlh.EfDataAccess.Areas.Repositories;
+
+namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services
+{
+    public interface IUnitOfWork
+    {
+        IRepository<TEntity> GetGenericRepository<TEntity>()
+            where TEntity : EntityBase;
+
+        TRepo GetRepository<TRepo>()
+            where TRepo : IRepository;
+
+        Task SaveAsync();
+    }
+}
