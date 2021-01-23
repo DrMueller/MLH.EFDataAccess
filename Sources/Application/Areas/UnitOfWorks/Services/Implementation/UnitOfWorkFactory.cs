@@ -6,11 +6,11 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
     internal class UnitOfWorkFactory : IUnitOfWorkFactory
     {
         private readonly IContainer _container;
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IAppDbContextFactory _dbContextFactory;
 
         public UnitOfWorkFactory(
             IContainer container,
-            IDbContextFactory dbContextFactory)
+            IAppDbContextFactory dbContextFactory)
         {
             _container = container;
             _dbContextFactory = dbContextFactory;

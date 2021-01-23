@@ -13,7 +13,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
     {
         private readonly ConcurrentDictionary<Type, IRepository> _repos;
         private readonly IContainer _serviceLocator;
-        private IDbContext _dbContext;
+        private IAppDbContext _dbContext;
 
         public UnitOfWork(IContainer serviceLocator)
         {
@@ -43,7 +43,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
             await _dbContext.SaveChangesAsync();
         }
 
-        internal void Initialize(IDbContext dbContext)
+        internal void Initialize(IAppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

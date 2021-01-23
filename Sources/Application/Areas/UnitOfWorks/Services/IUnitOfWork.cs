@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Mmu.Mlh.EfDataAccess.Areas.Entities;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         IRepository<TEntity> GetGenericRepository<TEntity>()
             where TEntity : EntityBase;

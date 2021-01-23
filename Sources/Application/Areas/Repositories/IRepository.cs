@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mmu.Mlh.EfDataAccess.Areas.Entities;
 
@@ -8,15 +10,15 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories
     {
     }
 
-    public interface IRepository<T> : IRepository
-        where T : EntityBase
+    public interface IRepository<TEntity> : IRepository
+        where TEntity : EntityBase
     {
         Task DeleteAsync(long id);
 
-        Task InsertAsync(T[] entities);
+        Task<TEntity> LoadSingleAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task<IReadOnlyCollection<T>> LoadAllAsync();
+        Task<IReadOnlyCollection<TEntity>> LoadAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task UpsertAsync(T entity);
+        Task UpsertAsync(TEntity entity);
     }
 }

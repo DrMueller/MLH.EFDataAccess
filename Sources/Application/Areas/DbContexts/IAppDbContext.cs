@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.DbContexts
 {
-    public interface IDbContext : IDisposable
+    public interface IAppDbContext : IDisposable
     {
         EntityEntry<TEntity> Add<TEntity>(TEntity entity) where TEntity : class;
 
