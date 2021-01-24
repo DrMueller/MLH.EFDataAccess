@@ -1,9 +1,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Internals.DbContexts.Contexts;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts;
 
-namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Internals.DbContexts.Factories.Implementation
+namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Factories.Implementation
 {
     internal class AppDbContextFactory : IAppDbContextFactory
     {

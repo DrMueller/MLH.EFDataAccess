@@ -15,9 +15,9 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories
     {
         Task DeleteAsync(long id);
 
-        Task<TEntity> LoadSingleAsync(Expression<Func<TEntity, bool>> predicate);
-
         Task<IReadOnlyCollection<TEntity>> LoadAsync(Expression<Func<TEntity, bool>> predicate);
+
+        Task<TEntity> LoadSingleAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task UpsertAsync(TEntity entity);
     }

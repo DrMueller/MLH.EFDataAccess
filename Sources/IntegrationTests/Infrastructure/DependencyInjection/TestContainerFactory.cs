@@ -1,5 +1,4 @@
-﻿
-using Lamar;
+﻿using Lamar;
 
 namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection
 {

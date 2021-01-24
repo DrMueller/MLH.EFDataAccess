@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
 
-namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Internals.DbContexts.Contexts
+namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts
 {
     public class AppDbContext : DbContext, IAppDbContext
     {

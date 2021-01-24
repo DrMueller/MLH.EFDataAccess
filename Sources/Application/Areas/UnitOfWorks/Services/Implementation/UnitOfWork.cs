@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
-using Lamar;
+﻿using System.Threading.Tasks;
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
 using Mmu.Mlh.EfDataAccess.Areas.Entities;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
-using Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Servants;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
 {
     internal class UnitOfWork : IUnitOfWork
     {
-        private readonly ConcurrentDictionary<Type, IRepository> _repos;
-        private readonly IContainer _serviceLocator;
+        private readonly IRepositoryCache _repoCache;
         private IAppDbContext _dbContext;
 
-        public UnitOfWork(IContainer serviceLocator)
+        public UnitOfWork(IRepositoryCache repoCache)
         {
-            _serviceLocator = serviceLocator;
-            _repos = new ConcurrentDictionary<Type, IRepository>();
+            _repoCache = repoCache;
         }
 
         public void Dispose()
@@ -29,13 +24,13 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
         public IRepository<TEntity> GetGenericRepository<TEntity>() where TEntity : EntityBase
         {
             var genericRepoType = typeof(IRepository<TEntity>);
-            return GetRepository<IRepository<TEntity>>(genericRepoType);
+            return _repoCache.GetRepository<IRepository<TEntity>>(genericRepoType, _dbContext);
         }
 
         public TRepo GetRepository<TRepo>() where TRepo : IRepository
         {
             var repoType = typeof(TRepo);
-            return GetRepository<TRepo>(repoType);
+            return _repoCache.GetRepository<TRepo>(repoType, _dbContext);
         }
 
         public async Task SaveAsync()
@@ -46,27 +41,6 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
         internal void Initialize(IAppDbContext dbContext)
         {
             _dbContext = dbContext;
-        }
-
-        private TRepo GetRepository<TRepo>(Type repoType)
-            where TRepo : IRepository
-        {
-            if (_repos.ContainsKey(repoType))
-            {
-                return (TRepo)_repos[repoType];
-            }
-
-            var repository = _serviceLocator.GetInstance<TRepo>();
-
-            if (!(repository is RepositoryBase repoBase))
-            {
-                throw new ArgumentException($"{nameof(TRepo)} does not implement RepositoryBase");
-            }
-
-            repoBase.Initialize(_dbContext);
-            _repos.AddOrUpdate(repoType, repository, (type, repo) => repo);
-
-            return repository;
         }
     }
 }

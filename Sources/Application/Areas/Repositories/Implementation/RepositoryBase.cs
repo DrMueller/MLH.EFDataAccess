@@ -18,9 +18,8 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
         where TEntity : EntityBase
     {
         private DbSet<TEntity> _dbSet;
-
         protected IQueryable<TEntity> Query => _dbSet;
-        
+
         public async Task DeleteAsync(long id)
         {
             var entity = await LoadSingleAsync(f => f.Id.Equals(id));

@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
 
-namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Internals.TypeConfigurations
+namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities.TypeConfigurations
 {
     public class StreetConfiguration : IEntityTypeConfiguration<Street>
     {

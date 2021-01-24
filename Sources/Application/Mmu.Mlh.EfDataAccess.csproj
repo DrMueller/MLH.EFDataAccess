@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Features>IOperation</Features>
-    <CodeAnalysisRuleSet>..\..\CA_ProductionCode.ruleset</CodeAnalysisRuleSet>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Company>DrMueller</Company>
-    <Product>MyLittleHelpers.EFDataAccess</Product>
-    <Authors>DrMueller</Authors>
-    <Description>DrMuellers little Entity Framework Data Access</Description>
-    <PackageProjectUrl>https://github.com/DrMueller/MLH.EfDataAccess</PackageProjectUrl>
-    <PackageIcon>M.png</PackageIcon>
-    <RepositoryUrl>https://github.com/DrMueller/MLH.EfDataAccess</RepositoryUrl>
-    <RepositoryType></RepositoryType>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <AssemblyVersion Condition="'$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</AssemblyVersion>
-    <FileVersion Condition="'$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</FileVersion>
-    <Version Condition="'$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</Version>
-    <AssemblyVersion Condition="'$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</AssemblyVersion>
-    <FileVersion Condition="'$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</FileVersion>
-    <Version Condition="'$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</Version>
-  </PropertyGroup>
+ <PropertyGroup>
+  <TargetFramework>netcoreapp3.1</TargetFramework>
+  <Features>IOperation</Features>
+  <CodeAnalysisRuleSet>..\..\CA_ProductionCode.ruleset</CodeAnalysisRuleSet>
+  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  <Company>DrMueller</Company>
+  <Product>MyLittleHelpers.EFDataAccess</Product>
+  <Authors>DrMueller</Authors>
+  <Description>DrMuellers little Entity Framework Data Access</Description>
+  <PackageProjectUrl>https://github.com/DrMueller/MLH.EfDataAccess</PackageProjectUrl>
+  <PackageIcon>M.png</PackageIcon>
+  <RepositoryUrl>https://github.com/DrMueller/MLH.EfDataAccess</RepositoryUrl>
+  <RepositoryType></RepositoryType>
+  <PackageLicenseUrl></PackageLicenseUrl>
+  <AssemblyVersion Condition="'$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</AssemblyVersion>
+  <FileVersion Condition="'$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</FileVersion>
+  <Version Condition="'$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</Version>
+  <AssemblyVersion Condition="'$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</AssemblyVersion>
+  <FileVersion Condition="'$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</FileVersion>
+  <Version Condition="'$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</Version>
+ </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
-    <PackageReference Include="Mmu.Mlh.ServiceProvisioning" Version="2.1.5" />
-    <None Include="Infrastructure\Assets\M.png" Pack="true" PackagePath="" />
+ <ItemGroup>
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+  <PackageReference Include="Mmu.Mlh.ServiceProvisioning" Version="2.1.5" />
+  <None Include="Infrastructure\Assets\M.png" Pack="true" PackagePath="" />
 
-  </ItemGroup>
+ </ItemGroup>
 
 </Project>
