@@ -1,7 +1,7 @@
 ﻿using Lamar;
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
 
-namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
+namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Implementation
 {
     internal class UnitOfWorkFactory : IUnitOfWorkFactory
     {

@@ -7,7 +7,6 @@
  </PropertyGroup>
 
  <ItemGroup>
-  <Folder Include="Areas\DataAccess\Entities\" />
   <Folder Include="Areas\Domain\" />
  </ItemGroup>
 

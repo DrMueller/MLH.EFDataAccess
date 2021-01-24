@@ -2,9 +2,9 @@
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
 using Mmu.Mlh.EfDataAccess.Areas.Entities;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
-using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Servants;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants;
 
-namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation
+namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Implementation
 {
     internal class UnitOfWork : IUnitOfWork
     {

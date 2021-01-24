@@ -7,7 +7,7 @@ using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation;
 using Mmu.Mlh.LanguageExtensions.Areas.Types.Maybes;
 
-namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Servants.Implementation
+namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
 {
     internal class RepositoryCache : IRepositoryCache
     {

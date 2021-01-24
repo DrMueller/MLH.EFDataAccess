@@ -22,13 +22,13 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
 
         public async Task DeleteAsync(long id)
         {
-            var entity = await LoadSingleAsync(f => f.Id.Equals(id));
-            if (entity == null)
+            var loadEntities = await LoadAsync(qry => qry.Where(f => f.Id.Equals(id)));
+            if (loadEntities == null)
             {
                 return;
             }
 
-            _dbSet.Remove(entity);
+            _dbSet.Remove(loadEntities.Single());
         }
 
         public override void Initialize(IAppDbContext dbContext)
@@ -36,20 +36,20 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             _dbSet = dbContext.Set<TEntity>();
         }
 
-        public async Task<IReadOnlyCollection<TEntity>> LoadAsync(Expression<Func<TEntity, bool>> predicate)
+        //public async Task<IReadOnlyCollection<TEntity>> LoadAsync(Expression<Func<TEntity, bool>> predicate)
+        //{
+        //    var query = _dbSet.Where(predicate);
+        //    var result = await query.ToListAsync();
+
+        //    return result;
+        //}
+
+        public async Task<IReadOnlyCollection<TEntity>> LoadAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder)
         {
-            var query = _dbSet.Where(predicate);
+            var qry = queryBuilder(_dbSet);
+            var lst = await qry.ToListAsync();
 
-            var result = await query.ToListAsync();
-
-            return result;
-        }
-
-        public async Task<TEntity> LoadSingleAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            var lst = await LoadAsync(predicate);
-
-            return lst.Single();
+            return lst;
         }
 
         public async Task UpsertAsync(TEntity entity)

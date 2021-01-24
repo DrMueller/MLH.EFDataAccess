@@ -1,25 +1,28 @@
 ﻿using FluentAssertions;
-using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
 
-namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks.Services
+namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
 {
     public class UnitOfWorkFactoryIntegrationTests
     {
+        private readonly IUnitOfWorkFactory _sut;
+
+        public UnitOfWorkFactoryIntegrationTests()
+        {
+            var container = TestContainerFactory.Create();
+            _sut = container.GetInstance<IUnitOfWorkFactory>();
+        }
+
         [Fact]
         public void CreatingTwoUnitOfWorks_ReturnsDifferentRepositories()
         {
-            // Arrange
-            var container = TestContainerFactory.Create();
-
-            var uowFactory = container.GetInstance<IUnitOfWorkFactory>();
-
             // Act
-            var uow1 = uowFactory.Create();
-            var uow2 = uowFactory.Create();
+            var uow1 = _sut.Create();
+            var uow2 = _sut.Create();
 
             var indRepo1 = uow1.GetRepository<IIndividualRepository>();
             var indRepo2 = uow2.GetRepository<IIndividualRepository>();
@@ -39,14 +42,9 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks.Services
         [Fact]
         public void CreatingUnitOfWork_CreatesNewUnitOfWork()
         {
-            // Arrange
-            var container = TestContainerFactory.Create();
-
-            var sut = container.GetInstance<IUnitOfWorkFactory>();
-
             // Act
-            var uow1 = sut.Create();
-            var uow2 = sut.Create();
+            var uow1 = _sut.Create();
+            var uow2 = _sut.Create();
 
             // Assert
             uow1.Should().NotBeSameAs(uow2);

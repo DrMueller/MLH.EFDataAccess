@@ -1,10 +1,10 @@
 ﻿using Lamar;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation;
-using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services;
-using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Implementation;
-using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Servants;
-using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Services.Servants.Implementation;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Implementation;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants;
+using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation;
 
 namespace Mmu.Mlh.EfDataAccess.Infrastructure.DependencyInjection
 {

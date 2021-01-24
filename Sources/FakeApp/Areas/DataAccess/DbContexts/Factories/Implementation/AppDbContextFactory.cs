@@ -10,7 +10,7 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Factories.Imp
         public IAppDbContext Create()
         {
             var options = new DbContextOptionsBuilder()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseInMemoryDatabase("Test")
                 .Options;
 
             return new AppDbContext(options);
