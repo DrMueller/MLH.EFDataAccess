@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
@@ -31,20 +30,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             _dbSet.Remove(loadEntities.Single());
         }
 
-        public override void Initialize(IAppDbContext dbContext)
-        {
-            _dbSet = dbContext.Set<TEntity>();
-        }
-
-        //public async Task<IReadOnlyCollection<TEntity>> LoadAsync(Expression<Func<TEntity, bool>> predicate)
-        //{
-        //    var query = _dbSet.Where(predicate);
-        //    var result = await query.ToListAsync();
-
-        //    return result;
-        //}
-
-        public async Task<IReadOnlyCollection<TEntity>> LoadAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> queryBuilder)
+        public async Task<IReadOnlyCollection<TResult>> LoadAsync<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> queryBuilder)
         {
             var qry = queryBuilder(_dbSet);
             var lst = await qry.ToListAsync();
@@ -52,6 +38,11 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             return lst;
         }
 
+        public override void Initialize(IAppDbContext dbContext)
+        {
+            _dbSet = dbContext.Set<TEntity>();
+        }
+        
         public async Task UpsertAsync(TEntity entity)
         {
             if (entity.Id.Equals(default))

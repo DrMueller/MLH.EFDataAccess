@@ -13,7 +13,7 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities.TypeConfigurati
             builder.Property(f => f.Birthdate).IsRequired();
             builder.Property(f => f.FirstName).IsRequired();
             builder.Property(f => f.LastName).IsRequired();
-            builder.HasMany(f => f.Addresses).WithOne().IsRequired();
+            builder.HasMany(f => f.Addresses).WithOne(f => f.Individual).IsRequired();
 
             builder.ToTable("Individual", "Core");
         }

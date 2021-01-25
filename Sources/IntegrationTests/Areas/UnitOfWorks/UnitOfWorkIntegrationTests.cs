@@ -7,6 +7,7 @@ using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories.Implementation;
+using Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
 
@@ -110,14 +111,13 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
             var addressRepo = sut.GetGenericRepository<Address>();
 
             // Act
-            var individual = new Individual
-            {
-                FirstName = Guid.NewGuid().ToString()
-            };
+            var individual = TestDataFactory.CreateIndividual();
 
             var address = new Address
             {
-                City = Guid.NewGuid().ToString()
+                City = Guid.NewGuid().ToString(),
+                Zip = 1715,
+                Individual = TestDataFactory.CreateIndividual()
             };
 
             await indRepo.UpsertAsync(individual);

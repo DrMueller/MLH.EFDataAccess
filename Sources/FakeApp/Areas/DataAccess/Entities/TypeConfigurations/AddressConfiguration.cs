@@ -11,7 +11,6 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities.TypeConfigurati
             builder.Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
 
             builder.HasMany(f => f.Streets).WithOne().IsRequired();
-
             builder.ToTable("Address", "Core");
         }
     }

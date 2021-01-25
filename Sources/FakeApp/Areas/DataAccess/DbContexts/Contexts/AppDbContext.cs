@@ -8,6 +8,7 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts
         public AppDbContext(DbContextOptions options)
             : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
