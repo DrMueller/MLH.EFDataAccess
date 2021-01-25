@@ -4,7 +4,7 @@ using Mmu.Mlh.EfDataAccess.Areas.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities
 {
-    [UsedImplicitly]
+    [PublicAPI]
     public class Address : EntityBase
     {
         public string City { get; set; }

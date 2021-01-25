@@ -5,7 +5,7 @@ using Mmu.Mlh.EfDataAccess.Areas.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities
 {
-    [UsedImplicitly]
+    [PublicAPI]
     public class Individual : EntityBase
     {
         public ICollection<Address> Addresses { get; set; }

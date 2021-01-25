@@ -1,4 +1,5 @@
-﻿using Lamar;
+﻿using JetBrains.Annotations;
+using Lamar;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
@@ -8,6 +9,7 @@ using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation;
 
 namespace Mmu.Mlh.EfDataAccess.Infrastructure.DependencyInjection
 {
+    [UsedImplicitly]
     public class RegistryCollection : ServiceRegistry
     {
         public RegistryCollection()
