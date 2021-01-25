@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
@@ -23,6 +24,101 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
         }
 
         [Fact]
+        public async Task Loading_WithoutIncludes_DoesNotLoadIncludes()
+        {
+            // Arrange
+            var individual = TestDataFactory.CreateIndividual();
+
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                await indRepo.UpsertAsync(individual);
+                await uow.SaveAsync();
+            }
+
+            // Act
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetRepository<IRepository<Individual>>();
+
+                var actualInds = await indRepo.LoadAsync(
+                    qry =>
+                        qry.Where(f => f.FirstName == individual.FirstName));
+
+                // Assert
+                actualInds.Single().Addresses.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public async Task Loading_WithSelectingDto_ReturnsDto()
+        {
+            // Arrange
+            var individual = TestDataFactory.CreateIndividual();
+
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                await indRepo.UpsertAsync(individual);
+                await uow.SaveAsync();
+            }
+
+            // Act
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                var actualDtos = await indRepo.LoadAsync(
+                    qry =>
+                        qry.Where(f => f.FirstName == individual.FirstName)
+                            .Select(
+                                f => new IndividualDto
+                                {
+                                    FirstName = f.FirstName,
+                                    LastName = f.LastName,
+                                    IndividualId = f.Id
+                                }));
+
+                // Assert
+                var actualDto = actualDtos.Single();
+                actualDto.FirstName.Should().Be(individual.FirstName);
+                actualDto.LastName.Should().Be(individual.LastName);
+                actualDto.IndividualId.Should().Be(individual.Id);
+            }
+        }
+
+        [Fact]
+        public async Task Loading_WithSelectingId_ReturnsId()
+        {
+            // Arrange
+            var individual = TestDataFactory.CreateIndividual();
+
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                await indRepo.UpsertAsync(individual);
+                await uow.SaveAsync();
+            }
+
+            // Act
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                var actualIndIds = await indRepo.LoadAsync(
+                    qry =>
+                        qry.Where(f => f.FirstName == individual.FirstName)
+                            .Select(f => f.Id));
+
+                // Assert
+                actualIndIds.Single().Should().Be(individual.Id);
+            }
+        }
+
+        [Fact]
         public async Task Loading_WithWhere_LoadsWhere()
         {
             // Arrange
@@ -31,7 +127,6 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-
                 var indRepo = uow.GetRepository<IIndividualRepository>();
                 await indRepo.UpsertAsync(individual1);
                 await indRepo.UpsertAsync(individual2);
@@ -86,101 +181,6 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
                 var expectedStreetName = actualind.Addresses.Single().Streets.Single().StreetName;
                 actualind.Addresses.Single().Streets.Single().StreetName.Should().Be(expectedStreetName);
-            }
-        }
-
-        [Fact]
-        public async Task Loading_WithoutIncludes_DoesNotLoadIncludes()
-        {
-            // Arrange
-            var individual = TestDataFactory.CreateIndividual();
-
-            using (var uow = _uowFactory.Create())
-            {
-                var indRepo = uow.GetGenericRepository<Individual>();
-
-                await indRepo.UpsertAsync(individual);
-                await uow.SaveAsync();
-            }
-
-            // Act
-            using (var uow = _uowFactory.Create())
-            {
-                var indRepo = uow.GetGenericRepository<Individual>();
-
-                var actualInds = await indRepo.LoadAsync(
-                    qry =>
-                        qry.Where(f => f.FirstName == individual.FirstName));
-
-                // Assert
-                actualInds.Single().Addresses.Should().BeNull();
-            }
-        }
-
-        [Fact]
-        public async Task Loading_WithSelectingId_ReturnsId()
-        {
-            // Arrange
-            var individual = TestDataFactory.CreateIndividual();
-
-            using (var uow = _uowFactory.Create())
-            {
-                var indRepo = uow.GetGenericRepository<Individual>();
-
-                await indRepo.UpsertAsync(individual);
-                await uow.SaveAsync();
-            }
-
-            // Act
-            using (var uow = _uowFactory.Create())
-            {
-                var indRepo = uow.GetGenericRepository<Individual>();
-
-                var actualIndIds = await indRepo.LoadAsync(
-                    qry =>
-                        qry.Where(f => f.FirstName == individual.FirstName)
-                            .Select(f => f.Id));
-
-                // Assert
-                actualIndIds.Single().Should().Be(individual.Id);
-            }
-        }
-
-
-        [Fact]
-        public async Task Loading_WithSelectingDto_ReturnsDto()
-        {
-            // Arrange
-            var individual = TestDataFactory.CreateIndividual();
-
-            using (var uow = _uowFactory.Create())
-            {
-                var indRepo = uow.GetGenericRepository<Individual>();
-
-                await indRepo.UpsertAsync(individual);
-                await uow.SaveAsync();
-            }
-
-            // Act
-            using (var uow = _uowFactory.Create())
-            {
-                var indRepo = uow.GetGenericRepository<Individual>();
-
-                var actualDtos = await indRepo.LoadAsync(
-                    qry =>
-                        qry.Where(f => f.FirstName == individual.FirstName)
-                            .Select(f => new IndividualDto
-                            {
-                                FirstName = f.FirstName,
-                                LastName = f.LastName,
-                                IndividualId = f.Id
-                            }));
-
-                // Assert
-                var actualDto = actualDtos.Single();
-                actualDto.FirstName.Should().Be(individual.FirstName);
-                actualDto.LastName.Should().Be(individual.LastName);
-                actualDto.IndividualId.Should().Be(individual.Id);
             }
         }
     }

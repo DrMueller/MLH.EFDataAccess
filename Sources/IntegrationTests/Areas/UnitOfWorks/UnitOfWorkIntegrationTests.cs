@@ -7,7 +7,7 @@ using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories.Implementation;
-using Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories;
+using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
 
@@ -27,7 +27,6 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
         [Fact]
         public void Requesting_generic_and_normal_repository_returns_same_instance()
         {
-
             // Act
             var actualIndRepo1 = _sut.GetGenericRepository<Individual>();
             var actualIndRepo2 = _sut.GetRepository<IIndividualRepository>();

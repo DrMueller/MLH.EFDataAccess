@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
 
-namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
+namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data
 {
     internal static class TestDataFactory
     {

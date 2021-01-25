@@ -33,7 +33,8 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
             where TRepo : IRepository
         {
             var repository = _container.GetInstance<TRepo>();
-            if (!(repository is RepositoryBase repoBase))
+
+            if (!(repository is IRepositoryBase repoBase))
             {
                 throw new ArgumentException($"{nameof(TRepo)} does not implement RepositoryBase");
             }

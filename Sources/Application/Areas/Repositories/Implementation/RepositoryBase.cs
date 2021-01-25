@@ -8,12 +8,13 @@ using Mmu.Mlh.EfDataAccess.Areas.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
 {
-    public abstract class RepositoryBase
+    // just to make it easy to initialize it
+    internal interface IRepositoryBase
     {
-        public abstract void Initialize(IAppDbContext dbContext);
+        internal void Initialize(IAppDbContext dbContext);
     }
 
-    public abstract class RepositoryBase<TEntity> : RepositoryBase, IRepository<TEntity>
+    public abstract class RepositoryBase<TEntity> : IRepositoryBase, IRepository<TEntity>
         where TEntity : EntityBase
     {
         private DbSet<TEntity> _dbSet;
@@ -38,11 +39,6 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             return lst;
         }
 
-        public override void Initialize(IAppDbContext dbContext)
-        {
-            _dbSet = dbContext.Set<TEntity>();
-        }
-        
         public async Task UpsertAsync(TEntity entity)
         {
             if (entity.Id.Equals(default))
@@ -53,6 +49,11 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             {
                 _dbSet.Update(entity);
             }
+        }
+
+        void IRepositoryBase.Initialize(IAppDbContext dbContext)
+        {
+            _dbSet = dbContext.Set<TEntity>();
         }
     }
 }
