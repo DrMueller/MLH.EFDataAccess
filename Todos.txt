@@ -1,3 +1,0 @@
-- Test mit SQL
-- Ungenerisches Repo entfernen
-- Ungenerisches Repo Interface entfernen
