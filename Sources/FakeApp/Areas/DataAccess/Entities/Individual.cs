@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mmu.Mlh.EfDataAccess.Areas.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities
 {
+    [UsedImplicitly]
     public class Individual : EntityBase
     {
         public ICollection<Address> Addresses { get; set; }

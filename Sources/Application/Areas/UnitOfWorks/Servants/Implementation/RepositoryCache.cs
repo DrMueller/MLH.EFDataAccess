@@ -12,7 +12,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
     internal class RepositoryCache : IRepositoryCache
     {
         private readonly IContainer _container;
-        private ConcurrentDictionary<Type, IRepository> _repos;
+        private readonly ConcurrentDictionary<Type, IRepository> _repos;
 
         public RepositoryCache(IContainer container)
         {
