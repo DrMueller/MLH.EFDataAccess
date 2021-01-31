@@ -9,13 +9,13 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Factories.Imp
     {
         public IAppDbContext Create()
         {
-            const string ConnectionString = "Data Source=localhost\\SQLEXPRESS;database=FakeDataAccess;trusted_connection=yes";
+            //const string ConnectionString = "Data Source=localhost\\SQLEXPRESS;database=FakeDataAccess;trusted_connection=yes";
 
             var options = new DbContextOptionsBuilder()
-                .UseSqlServer(ConnectionString)
-                //.UseInMemoryDatabase("Test")
+                //.UseSqlServer(ConnectionString)
+                .UseInMemoryDatabase("Test")
                 .ConfigureWarnings(f => f.Throw())
-                .LogTo((str) =>
+                .LogTo(str =>
                        {
                            Debug.WriteLine(str);
                        })

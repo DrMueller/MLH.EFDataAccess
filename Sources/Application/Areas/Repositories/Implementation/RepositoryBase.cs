@@ -39,6 +39,13 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             return lst;
         }
 
+        public async Task<TResult> LoadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> queryBuilder)
+        {
+            var qry = await queryBuilder(_dbSet);
+
+            return qry;
+        }
+
         public async Task UpsertAsync(TEntity entity)
         {
             if (entity.Id.Equals(default))

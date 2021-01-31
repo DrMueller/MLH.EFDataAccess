@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -184,9 +185,80 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             }
         }
 
+        [Fact]
+        public async Task LoadingSingle_LoadSingle()
+        {
+            // Arrange
+            var individual1 = TestDataFactory.CreateIndividual();
+            var individual2 = TestDataFactory.CreateIndividual();
+
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetRepository<IIndividualRepository>();
+                await indRepo.UpsertAsync(individual1);
+                await indRepo.UpsertAsync(individual2);
+                await uow.SaveAsync();
+            }
+
+            // Act
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetRepository<IIndividualRepository>();
+
+                var actualInd = await indRepo.LoadAsync(
+                    qry =>
+                        qry.SingleAsync(f => f.FirstName == individual1.FirstName));
+
+                // Assert
+                actualInd.Should().NotBeNull();
+                actualInd.Id.Should().Be(individual1.Id);
+            }
+        }
 
         [Fact]
-        public async Task Loading_WitSingle_LoadsSingle()
+        public async Task Upserting_ExistingEntity_UpdatesEntity()
+        {
+            // Arrange
+            var individual = TestDataFactory.CreateIndividual();
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+                await indRepo.UpsertAsync(individual);
+                await uow.SaveAsync();
+            }
+
+            // Act
+            var newLastName = Guid.NewGuid().ToString();
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                var actualInd = await indRepo.LoadAsync(
+                    qry =>
+                        qry.SingleAsync(f => f.Id == individual.Id));
+
+                actualInd.LastName = newLastName;
+
+                await indRepo.UpsertAsync(actualInd);
+                await uow.SaveAsync();
+            }
+
+            // Assert
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                var actualInd = await indRepo.LoadAsync(
+                    qry =>
+                        qry.SingleAsync(f => f.Id == individual.Id));
+
+                actualInd.Should().NotBeNull();
+                actualInd.LastName.Should().Be(newLastName);
+            }
+        }
+
+        [Fact]
+        public async Task Upserting_NewEntity_InsertsEntity()
         {
             // Arrange
             var individual = TestDataFactory.CreateIndividual();
@@ -203,19 +275,12 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             {
                 var indRepo = uow.GetGenericRepository<Individual>();
 
-                var actualInds = await indRepo.LoadAsync(
+                var actualInd = await indRepo.LoadAsync(
                     qry =>
-                        qry.Single(f => f.FirstName == individual.FirstName));
+                        qry.SingleAsync(f => f.Id == individual.Id));
 
                 // Assert
-                var actualind = actualInds.Single();
-                actualind.Addresses.Should().NotBeNull();
-                actualind.Addresses.Count.Should().Be(1);
-                actualind.Addresses.Single().Streets.Should().NotBeNull();
-                actualind.Addresses.Single().Streets.Count.Should().Be(1);
-
-                var expectedStreetName = actualind.Addresses.Single().Streets.Single().StreetName;
-                actualind.Addresses.Single().Streets.Single().StreetName.Should().Be(expectedStreetName);
+                actualInd.Should().NotBeNull();
             }
         }
     }
