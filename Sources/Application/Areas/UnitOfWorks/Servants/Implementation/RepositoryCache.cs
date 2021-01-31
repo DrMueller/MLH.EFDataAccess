@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using JetBrains.Annotations;
 using Lamar;
 using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
@@ -9,6 +10,7 @@ using Mmu.Mlh.LanguageExtensions.Areas.Types.Maybes;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
 {
+    [UsedImplicitly]
     internal class RepositoryCache : IRepositoryCache
     {
         private readonly IContainer _container;

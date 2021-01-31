@@ -4,7 +4,7 @@ using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants
 {
-    public interface IRepositoryCache
+    internal interface IRepositoryCache
     {
         TRepo GetRepository<TRepo>(Type repositoryType, IAppDbContext dbContext)
             where TRepo : IRepository;
