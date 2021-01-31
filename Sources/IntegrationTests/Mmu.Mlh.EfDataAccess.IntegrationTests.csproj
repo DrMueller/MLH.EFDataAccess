@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Mmu.Mlh.EfDataAccess.csproj" />
     <ProjectReference Include="..\FakeApp\Mmu.Mlh.EfDataAccess.FakeApp.csproj" />
   </ItemGroup>
 

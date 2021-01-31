@@ -183,5 +183,40 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
                 actualind.Addresses.Single().Streets.Single().StreetName.Should().Be(expectedStreetName);
             }
         }
+
+
+        [Fact]
+        public async Task Loading_WitSingle_LoadsSingle()
+        {
+            // Arrange
+            var individual = TestDataFactory.CreateIndividual();
+
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+                await indRepo.UpsertAsync(individual);
+                await uow.SaveAsync();
+            }
+
+            // Act
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                var actualInds = await indRepo.LoadAsync(
+                    qry =>
+                        qry.Single(f => f.FirstName == individual.FirstName));
+
+                // Assert
+                var actualind = actualInds.Single();
+                actualind.Addresses.Should().NotBeNull();
+                actualind.Addresses.Count.Should().Be(1);
+                actualind.Addresses.Single().Streets.Should().NotBeNull();
+                actualind.Addresses.Single().Streets.Count.Should().Be(1);
+
+                var expectedStreetName = actualind.Addresses.Single().Streets.Single().StreetName;
+                actualind.Addresses.Single().Streets.Single().StreetName.Should().Be(expectedStreetName);
+            }
+        }
     }
 }

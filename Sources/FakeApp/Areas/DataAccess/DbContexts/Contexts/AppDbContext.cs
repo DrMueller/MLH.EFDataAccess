@@ -17,8 +17,6 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts
             {
                 return;
             }
-
-            optionsBuilder.ConfigureWarnings(warnings => warnings.Throw());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
