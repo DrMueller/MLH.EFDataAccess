@@ -12,6 +12,8 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjecti
                     scanner.AssemblyContainingType<RegistryCollection>();
                     scanner.WithDefaultConventions();
                 });
+
+            //For<IAppDbContextFactory>().Use<TestDbContextFactory>().Singleton();
         }
     }
 }

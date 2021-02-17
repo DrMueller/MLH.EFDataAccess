@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 {
-    // Fun fact: Using the same dbset caches the includes kindahow, sow ecreate new ones
+    // Fun fact: Using the same dbset caches the includes kindahow, so we create new ones
     public class RepositoryBaseIntegrationTests
     {
         private readonly IUnitOfWorkFactory _uowFactory;

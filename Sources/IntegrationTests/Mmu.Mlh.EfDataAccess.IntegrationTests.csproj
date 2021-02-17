@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Features>IOperation</Features>
-    <CodeAnalysisRuleSet>..\..\CA_TestCode.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+ <PropertyGroup>
+  <TargetFramework>netcoreapp3.1</TargetFramework>
+  <Features>IOperation</Features>
+  <CodeAnalysisRuleSet>..\..\CA_TestCode.ruleset</CodeAnalysisRuleSet>
+ </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.0" />
-    <PackageReference Include="Lamar" Version="3.0.5" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+ <ItemGroup>
+  <PackageReference Include="FluentAssertions" Version="5.10.0" />
+  <PackageReference Include="Lamar" Version="3.0.5" />
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+  <PackageReference Include="xunit" Version="2.4.1" />
+  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+   <PrivateAssets>all</PrivateAssets>
+   <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  </PackageReference>
+ </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Application\Mmu.Mlh.EfDataAccess.csproj" />
-    <ProjectReference Include="..\FakeApp\Mmu.Mlh.EfDataAccess.FakeApp.csproj" />
-  </ItemGroup>
+ <ItemGroup>
+  <ProjectReference Include="..\Application\Mmu.Mlh.EfDataAccess.csproj" />
+  <ProjectReference Include="..\FakeApp\Mmu.Mlh.EfDataAccess.FakeApp.csproj" />
+ </ItemGroup>
 
 </Project>

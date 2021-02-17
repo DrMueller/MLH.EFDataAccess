@@ -19,7 +19,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories
         Task DeleteAsync(long id);
 
         Task<IReadOnlyCollection<TResult>> LoadAsync<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> queryBuilder);
-        
+
         Task<TResult> LoadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> queryBuilder);
 
         Task UpsertAsync(TEntity entity);
