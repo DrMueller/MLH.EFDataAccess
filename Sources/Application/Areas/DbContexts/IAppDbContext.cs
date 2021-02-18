@@ -15,5 +15,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.DbContexts
         Task<int> SaveChangesAsync(CancellationToken token = default);
 
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
+
+        ChangeTracker ChangeTracker { get; }
     }
 }

@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Lamar;
 using Microsoft.EntityFrameworkCore;
+using Mmu.Mlh.EfDataAccess.Areas.Querying;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
@@ -10,18 +12,20 @@ using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 {
     // Fun fact: Using the same dbset caches the includes kindahow, so we create new ones
     public class RepositoryBaseIntegrationTests
     {
+        private readonly IContainer _container;
         private readonly IUnitOfWorkFactory _uowFactory;
 
         public RepositoryBaseIntegrationTests()
         {
-            var container = TestContainerFactory.Create();
-            _uowFactory = container.GetInstance<IUnitOfWorkFactory>();
+            _container = TestContainerFactory.Create();
+            _uowFactory = _container.GetInstance<IUnitOfWorkFactory>();
         }
 
         [Fact]
@@ -216,6 +220,57 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
         }
 
         [Fact]
+        public async Task Upserting_EntityBeingQueryiedByQueryService_DoesSaveNavigationProperties()
+        {
+            // Arrange
+            var individual = TestDataFactory.CreateIndividual();
+            using (var uow = _uowFactory.Create())
+            {
+                var indRepo = uow.GetGenericRepository<Individual>();
+
+                await indRepo.UpsertAsync(individual);
+                await uow.SaveAsync();
+            }
+
+            var queryService = _container.GetService<IQueryService>();
+            var loadedIndividual = await queryService.QuerySingleAsync<Individual>(
+                qry =>
+                    qry.Include(f => f.Addresses)
+                        .ThenInclude(f => f.Streets)
+                        .SingleAsync(f => f.FirstName == individual.FirstName));
+
+
+            var adr = TestDataFactory.CreateAddress();
+
+            // Act
+            using (var uow = _uowFactory.Create())
+            {
+                adr.Streets.Add(TestDataFactory.CreateStreet());
+                var indRepo2 = uow.GetGenericRepository<Individual>();
+
+                loadedIndividual.Addresses.Add(adr);
+                await indRepo2.UpsertAsync(loadedIndividual);
+                await uow.SaveAsync();
+            }
+
+            // Assert
+            var actualIndividual = await queryService.QuerySingleAsync<Individual>(
+                qry =>
+                    qry.Include(f => f.Addresses)
+                        .ThenInclude(f => f.Streets)
+                        .SingleAsync(f => f.FirstName == individual.FirstName));
+
+            actualIndividual.Should().NotBeNull();
+            actualIndividual.Addresses.Should().HaveCount(loadedIndividual.Addresses.Count);
+            actualIndividual.Addresses.SelectMany(f => f.Streets).Count().Should().Be(loadedIndividual.Addresses.SelectMany(f => f.Streets).Count());
+            actualIndividual.Addresses.Should().Contain(f => f.Zip == adr.Zip);
+
+            var actualStreets = actualIndividual.Addresses.SelectMany(f => f.Streets).ToList();
+            var expectedStreetsCount = loadedIndividual.Addresses.SelectMany(f => f.Streets).Count();
+            actualStreets.Count.Should().Be(expectedStreetsCount);
+        }
+
+        [Fact]
         public async Task Upserting_ExistingEntity_UpdatesEntity()
         {
             // Arrange
@@ -229,17 +284,25 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             // Act
             var newLastName = Guid.NewGuid().ToString();
+            Individual loadedIndividual = null;
             using (var uow = _uowFactory.Create())
             {
                 var indRepo = uow.GetGenericRepository<Individual>();
 
-                var actualInd = await indRepo.LoadAsync(
+                loadedIndividual = await indRepo.LoadAsync(
                     qry =>
-                        qry.SingleAsync(f => f.Id == individual.Id));
+                        qry
+                            .Include(f => f.Addresses)
+                            .ThenInclude(f => f.Streets)
+                            .SingleAsync(f => f.Id == individual.Id));
 
-                actualInd.LastName = newLastName;
+                loadedIndividual.LastName = newLastName;
+                var adr = TestDataFactory.CreateAddress();
+                adr.Zip = 1678;
+                adr.Streets.Add(TestDataFactory.CreateStreet());
+                loadedIndividual.Addresses.Add(adr);
 
-                await indRepo.UpsertAsync(actualInd);
+                await indRepo.UpsertAsync(loadedIndividual);
                 await uow.SaveAsync();
             }
 
@@ -248,12 +311,21 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             {
                 var indRepo = uow.GetGenericRepository<Individual>();
 
-                var actualInd = await indRepo.LoadAsync(
+                var actualIndividual = await indRepo.LoadAsync(
                     qry =>
-                        qry.SingleAsync(f => f.Id == individual.Id));
+                        qry
+                            .Include(f => f.Addresses)
+                            .ThenInclude(f => f.Streets)
+                            .SingleAsync(f => f.Id == individual.Id));
 
-                actualInd.Should().NotBeNull();
-                actualInd.LastName.Should().Be(newLastName);
+                actualIndividual.Should().NotBeNull();
+                actualIndividual.LastName.Should().Be(newLastName);
+
+                actualIndividual.Addresses.Count.Should().Be(loadedIndividual.Addresses.Count);
+
+                var actualStreetsCount = actualIndividual.Addresses.SelectMany(f => f.Streets).Count();
+                var expectedStreetsCount = loadedIndividual.Addresses.SelectMany(f => f.Streets).Count();
+                actualStreetsCount.Should().Be(expectedStreetsCount);
             }
         }
 

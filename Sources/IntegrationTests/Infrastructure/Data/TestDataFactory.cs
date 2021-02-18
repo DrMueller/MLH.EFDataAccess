@@ -6,6 +6,27 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data
 {
     internal static class TestDataFactory
     {
+        internal static Address CreateAddress()
+        {
+            return new Address
+            {
+                Streets = new List<Street>
+                {
+                    CreateStreet()
+                },
+                City = Guid.NewGuid().ToString(),
+                Zip = 1234
+            };
+        }
+
+        internal static Street CreateStreet()
+        {
+            return new Street
+            {
+                StreetName = Guid.NewGuid().ToString()
+            };
+        }
+
         internal static Individual CreateIndividual()
         {
             var ind = new Individual
@@ -15,18 +36,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data
                 Birthdate = new DateTime(1986, 12, 29),
                 Addresses = new List<Address>
                 {
-                    new Address
-                    {
-                        Streets = new List<Street>
-                        {
-                            new Street
-                            {
-                                StreetName = Guid.NewGuid().ToString()
-                            }
-                        },
-                        City = "City",
-                        Zip = 1234
-                    }
+                    CreateAddress()
                 }
             };
 

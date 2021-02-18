@@ -17,8 +17,9 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
     public abstract class RepositoryBase<TEntity> : IRepositoryBase, IRepository<TEntity>
         where TEntity : EntityBase
     {
-        private DbSet<TEntity> _dbSet;
-        protected IQueryable<TEntity> Query => _dbSet;
+        private IAppDbContext _dbContext;
+        private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
+        protected IQueryable<TEntity> Query => DbSet;
 
         public async Task DeleteAsync(long id)
         {
@@ -28,12 +29,12 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
                 return;
             }
 
-            _dbSet.Remove(loadEntities.Single());
+            DbSet.Remove(loadEntities.Single());
         }
 
         public async Task<IReadOnlyCollection<TResult>> LoadAsync<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> queryBuilder)
         {
-            var qry = queryBuilder(_dbSet);
+            var qry = queryBuilder(DbSet);
             var lst = await qry.ToListAsync();
 
             return lst;
@@ -41,7 +42,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
 
         public async Task<TResult> LoadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> queryBuilder)
         {
-            var qry = await queryBuilder(_dbSet);
+            var qry = await queryBuilder(DbSet);
 
             return qry;
         }
@@ -50,17 +51,21 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
         {
             if (entity.Id.Equals(default))
             {
-                await _dbSet.AddAsync(entity);
+                await DbSet.AddAsync(entity);
             }
             else
             {
-                _dbSet.Update(entity);
+                var attachedEntity = _dbContext.ChangeTracker.Entries<TEntity>().SingleOrDefault(e => e.Entity.Id == entity.Id);
+                if (attachedEntity == null)
+                {
+                    DbSet.Update(entity);
+                }
             }
         }
 
         void IRepositoryBase.Initialize(IAppDbContext dbContext)
         {
-            _dbSet = dbContext.Set<TEntity>();
+            _dbContext = dbContext;
         }
     }
 }
