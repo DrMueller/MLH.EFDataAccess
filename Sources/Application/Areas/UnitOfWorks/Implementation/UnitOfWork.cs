@@ -24,12 +24,14 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Implementation
         public IRepository<TEntity> GetGenericRepository<TEntity>() where TEntity : EntityBase
         {
             var genericRepoType = typeof(IRepository<TEntity>);
+
             return _repoCache.GetRepository<IRepository<TEntity>>(genericRepoType, _dbContext);
         }
 
         public TRepo GetRepository<TRepo>() where TRepo : IRepository
         {
             var repoType = typeof(TRepo);
+
             return _repoCache.GetRepository<TRepo>(repoType, _dbContext);
         }
 

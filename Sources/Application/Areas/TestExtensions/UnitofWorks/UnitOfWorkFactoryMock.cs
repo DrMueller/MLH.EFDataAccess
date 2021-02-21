@@ -9,7 +9,6 @@ namespace Mmu.Mlh.EfDataAccess.Areas.TestExtensions.UnitofWorks
     {
         private readonly Mock<IUnitOfWorkFactory> _uowFactoryMock;
         private readonly Mock<IUnitOfWork> _uowMock;
-        public IUnitOfWorkFactory Object => _uowFactoryMock.Object;
 
         public UnitOfWorkFactoryMock()
         {
@@ -17,6 +16,8 @@ namespace Mmu.Mlh.EfDataAccess.Areas.TestExtensions.UnitofWorks
             _uowMock = new Mock<IUnitOfWork>();
             _uowFactoryMock.Setup(f => f.Create()).Returns(_uowMock.Object);
         }
+
+        public IUnitOfWorkFactory Object => _uowFactoryMock.Object;
 
         public Mock<IRepository<TEntity>> RegisterGenericRepoMock<TEntity>()
             where TEntity : EntityBase

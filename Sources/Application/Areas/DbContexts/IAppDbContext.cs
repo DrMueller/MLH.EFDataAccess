@@ -8,6 +8,8 @@ namespace Mmu.Mlh.EfDataAccess.Areas.DbContexts
 {
     public interface IAppDbContext : IDisposable
     {
+        ChangeTracker ChangeTracker { get; }
+
         EntityEntry<TEntity> Add<TEntity>(TEntity entity) where TEntity : class;
 
         int SaveChanges();
@@ -15,7 +17,5 @@ namespace Mmu.Mlh.EfDataAccess.Areas.DbContexts
         Task<int> SaveChangesAsync(CancellationToken token = default);
 
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
-
-        ChangeTracker ChangeTracker { get; }
     }
 }

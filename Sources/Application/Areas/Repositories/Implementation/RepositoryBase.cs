@@ -18,12 +18,13 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
         where TEntity : EntityBase
     {
         private IAppDbContext _dbContext;
-        private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
         protected IQueryable<TEntity> Query => DbSet;
+        private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
 
         public async Task DeleteAsync(long id)
         {
             var loadEntities = await LoadAsync(qry => qry.Where(f => f.Id.Equals(id)));
+
             if (loadEntities == null)
             {
                 return;
@@ -56,6 +57,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation
             else
             {
                 var attachedEntity = _dbContext.ChangeTracker.Entries<TEntity>().SingleOrDefault(e => e.Entity.Id == entity.Id);
+
                 if (attachedEntity == null)
                 {
                     DbSet.Update(entity);

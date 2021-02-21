@@ -19,14 +19,6 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data
             };
         }
 
-        internal static Street CreateStreet()
-        {
-            return new Street
-            {
-                StreetName = Guid.NewGuid().ToString()
-            };
-        }
-
         internal static Individual CreateIndividual()
         {
             var ind = new Individual
@@ -41,6 +33,14 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data
             };
 
             return ind;
+        }
+
+        internal static Street CreateStreet()
+        {
+            return new Street
+            {
+                StreetName = Guid.NewGuid().ToString()
+            };
         }
     }
 }

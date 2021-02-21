@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Mmu.Mlh.EfDataAccess.Areas.Querying;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
@@ -12,7 +13,6 @@ using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 {
@@ -224,6 +224,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
         {
             // Arrange
             var individual = TestDataFactory.CreateIndividual();
+
             using (var uow = _uowFactory.Create())
             {
                 var indRepo = uow.GetGenericRepository<Individual>();
@@ -238,7 +239,6 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
                     qry.Include(f => f.Addresses)
                         .ThenInclude(f => f.Streets)
                         .SingleAsync(f => f.FirstName == individual.FirstName));
-
 
             var adr = TestDataFactory.CreateAddress();
 
@@ -275,6 +275,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
         {
             // Arrange
             var individual = TestDataFactory.CreateIndividual();
+
             using (var uow = _uowFactory.Create())
             {
                 var indRepo = uow.GetGenericRepository<Individual>();
@@ -285,6 +286,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             // Act
             var newLastName = Guid.NewGuid().ToString();
             Individual loadedIndividual = null;
+
             using (var uow = _uowFactory.Create())
             {
                 var indRepo = uow.GetGenericRepository<Individual>();
