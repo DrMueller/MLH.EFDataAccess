@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Mmu.Mlh.EfDataAccess.Areas.DbContexts
+namespace Mmu.Mlh.EfDataAccess.Areas.DbContexts.Contexts
 {
     public interface IAppDbContext : IDisposable
     {

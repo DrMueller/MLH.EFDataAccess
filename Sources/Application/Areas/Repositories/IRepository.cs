@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Mmu.Mlh.EfDataAccess.Areas.Entities;
+using Mmu.Mlh.EfDataAccess.Areas.Data.Entities.Base;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.Repositories
 {
@@ -13,15 +12,9 @@ namespace Mmu.Mlh.EfDataAccess.Areas.Repositories
     }
 
     [PublicAPI]
-    public interface IRepository<TEntity> : IRepository
+    public interface IRepository<out TEntity> : IRepository
         where TEntity : EntityBase
     {
-        Task DeleteAsync(long id);
-
-        Task<IReadOnlyCollection<TResult>> LoadAsync<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> queryBuilder);
-
         Task<TResult> LoadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> queryBuilder);
-
-        Task UpsertAsync(TEntity entity);
     }
 }

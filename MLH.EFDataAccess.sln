@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlh.EfDataAccess", "Sources\Application\Mmu.Mlh.EfDataAccess.csproj", "{8AA9FC8F-A64E-4F7A-8B25-39D5A7A0BB8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlh.EfDataAccess.UnitTests", "Sources\UnitTests\Mmu.Mlh.EfDataAccess.UnitTests.csproj", "{94BDEB4E-D9AB-4721-B1BE-E85281BB2831}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlh.EfDataAccess.IntegrationTests", "Sources\IntegrationTests\Mmu.Mlh.EfDataAccess.IntegrationTests.csproj", "{319548D8-FF37-4155-AF37-047E7A737E2F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlh.EfDataAccess.FakeApp", "Sources\FakeApp\Mmu.Mlh.EfDataAccess.FakeApp.csproj", "{FA788F70-81D1-4A3F-B5EA-C5FC279F0A8B}"
@@ -26,10 +24,6 @@ Global
 		{8AA9FC8F-A64E-4F7A-8B25-39D5A7A0BB8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AA9FC8F-A64E-4F7A-8B25-39D5A7A0BB8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AA9FC8F-A64E-4F7A-8B25-39D5A7A0BB8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94BDEB4E-D9AB-4721-B1BE-E85281BB2831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94BDEB4E-D9AB-4721-B1BE-E85281BB2831}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94BDEB4E-D9AB-4721-B1BE-E85281BB2831}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94BDEB4E-D9AB-4721-B1BE-E85281BB2831}.Release|Any CPU.Build.0 = Release|Any CPU
 		{319548D8-FF37-4155-AF37-047E7A737E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{319548D8-FF37-4155-AF37-047E7A737E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{319548D8-FF37-4155-AF37-047E7A737E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU

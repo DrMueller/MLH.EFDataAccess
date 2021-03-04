@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
-using Mmu.Mlh.EfDataAccess.Areas.Entities;
+using Mmu.Mlh.EfDataAccess.Areas.Data.Entities.Base;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Contexts;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants;
 
@@ -21,11 +21,18 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Implementation
             _dbContext?.Dispose();
         }
 
-        public IRepository<TEntity> GetGenericRepository<TEntity>() where TEntity : EntityBase
+        public ICodeRepository<TEntity> GetCodeRepository<TEntity>() where TEntity : CodeEntity
         {
-            var genericRepoType = typeof(IRepository<TEntity>);
+            var repoType = typeof(ICodeRepository<TEntity>);
 
-            return _repoCache.GetRepository<IRepository<TEntity>>(genericRepoType, _dbContext);
+            return _repoCache.GetRepository<ICodeRepository<TEntity>>(repoType, _dbContext);
+        }
+
+        public IIdRepository<TEntity> GetIdRepository<TEntity>() where TEntity : IdEntity
+        {
+            var repoType = typeof(IIdRepository<TEntity>);
+
+            return _repoCache.GetRepository<IIdRepository<TEntity>>(repoType, _dbContext);
         }
 
         public TRepo GetRepository<TRepo>() where TRepo : IRepository

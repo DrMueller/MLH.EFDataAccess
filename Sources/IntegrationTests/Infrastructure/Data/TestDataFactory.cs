@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data
 {

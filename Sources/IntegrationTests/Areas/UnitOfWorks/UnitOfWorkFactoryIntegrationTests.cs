@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
@@ -27,16 +27,24 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
             var indRepo1 = uow1.GetRepository<IIndividualRepository>();
             var indRepo2 = uow2.GetRepository<IIndividualRepository>();
 
-            var genericIndRepo1 = uow1.GetGenericRepository<Individual>();
-            var genericIndRepo2 = uow2.GetGenericRepository<Individual>();
+            var idIndRepo1 = uow1.GetIdRepository<Individual>();
+            var idIndRepo2 = uow2.GetIdRepository<Individual>();
 
-            var genericAddressRepo1 = uow1.GetGenericRepository<Address>();
-            var genericAddressRepo2 = uow2.GetGenericRepository<Address>();
+            var adrRepo1 = uow1.GetIdRepository<Address>();
+            var adrRepo2 = uow2.GetIdRepository<Address>();
+
+            var currencyRepo1 = uow1.GetRepository<ICountryRepository>();
+            var currencyRepo2 = uow2.GetRepository<ICountryRepository>();
+
+            var countryRepo1 = uow1.GetCodeRepository<Country>();
+            var countryRepo2 = uow2.GetCodeRepository<Country>();
 
             // Assert
+            idIndRepo1.Should().NotBeSameAs(idIndRepo2);
             indRepo1.Should().NotBeSameAs(indRepo2);
-            genericIndRepo1.Should().NotBeSameAs(genericIndRepo2);
-            genericAddressRepo1.Should().NotBeSameAs(genericAddressRepo2);
+            adrRepo1.Should().NotBeSameAs(adrRepo2);
+            currencyRepo1.Should().NotBeSameAs(currencyRepo2);
+            countryRepo1.Should().NotBeSameAs(countryRepo2);
         }
 
         [Fact]

@@ -1,15 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mmu.Mlh.EfDataAccess.Areas.Data.TypeConfigurations.Base;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 
-namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities.TypeConfigurations
+namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.TypeConfigurations
 {
-    public class IndividualConfiguration : IEntityTypeConfiguration<Individual>
+    public class IndividualConfig : IdEntityConfigBase<Individual>
     {
-        public void Configure(EntityTypeBuilder<Individual> builder)
+        protected override void ConfigureEntity(EntityTypeBuilder<Individual> builder)
         {
-            builder.HasKey(f => f.Id);
-            builder.Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
-
             builder.Property(f => f.Birthdate).IsRequired();
             builder.Property(f => f.FirstName).IsRequired();
             builder.Property(f => f.LastName).IsRequired();

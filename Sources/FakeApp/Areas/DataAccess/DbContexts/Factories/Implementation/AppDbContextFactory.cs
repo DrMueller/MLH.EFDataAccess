@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Contexts;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Factories;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Factories.Implementation
 {
@@ -33,7 +33,7 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Factories.Imp
                     })
                 .Options;
 
-            return new AppDbContext(options);
+            return new Contexts.AppDbContext(options);
         }
     }
 }

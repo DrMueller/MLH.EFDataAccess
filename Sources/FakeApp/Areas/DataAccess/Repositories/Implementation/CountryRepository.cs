@@ -7,9 +7,9 @@ using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories.Implementation
 {
-    public class IndividualRepository : IdRepositoryBase<Individual>, IIndividualRepository
+    public class CountryRepository : CodeRepositoryBase<Country>, ICountryRepository
     {
-        public async Task<IReadOnlyCollection<Individual>> LoadFirst10Async()
+        public async Task<IReadOnlyCollection<Country>> LoadFirst10Async()
         {
             return await Query.Take(10).ToListAsync();
         }

@@ -1,9 +1,9 @@
 ﻿using JetBrains.Annotations;
 
-namespace Mmu.Mlh.EfDataAccess.Areas.Entities
+namespace Mmu.Mlh.EfDataAccess.Areas.Data.Entities.Base
 {
     [PublicAPI]
-    public abstract class EntityBase
+    public abstract class IdEntity : EntityBase
     {
         public long Id { get; set; }
     }

@@ -16,11 +16,22 @@ namespace Mmu.Mlh.EfDataAccess.Infrastructure.DependencyInjection
     {
         public RegistryCollection()
         {
-            For(typeof(IRepository<>)).Use(typeof(CoreRepository<>)).Transient();
+            // We don't want to do that here, this should the client do
+            // But nice to see how it should work
+            Scan(
+                scanner =>
+                {
+                    scanner.AssemblyContainingType<RegistryCollection>();
+                    scanner.AddAllTypesOf(typeof(IRepository<>));
+                    scanner.WithDefaultConventions();
+                });
+
+            For(typeof(IIdRepository<>)).Use(typeof(IdCoreRepository<>)).Transient();
+            For(typeof(ICodeRepository<>)).Use(typeof(CodeCoreRepository<>)).Transient();
             For<UnitOfWork>().Use<UnitOfWork>().Transient();
             For<IUnitOfWorkFactory>().Use<UnitOfWorkFactory>().Singleton();
-            For<IRepositoryCache>().Use<RepositoryCache>().Transient();
             For<IQueryService>().Use<QueryService>().Singleton();
+            For<IRepositoryCache>().Use<RepositoryCache>().Transient();
         }
     }
 }

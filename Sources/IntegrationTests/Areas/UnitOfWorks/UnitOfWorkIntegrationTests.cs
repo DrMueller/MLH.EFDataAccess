@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories.Implementation;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data;
@@ -25,10 +26,20 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
         }
 
         [Fact]
-        public void Requesting_generic_and_normal_repository_returns_same_instance()
+        public void Requesting_coderepository_with_specific_implementation_returns_implementation()
         {
             // Act
-            var actualIndRepo1 = _sut.GetGenericRepository<Individual>();
+            var actualIndRepo = _sut.GetCodeRepository<Country>();
+
+            // Assert
+            actualIndRepo.Should().BeOfType<CountryRepository>();
+        }
+
+        [Fact]
+        public void Requesting_id_and_normal_repository_returns_same_instance()
+        {
+            // Act
+            var actualIndRepo1 = _sut.GetIdRepository<Individual>();
             var actualIndRepo2 = _sut.GetRepository<IIndividualRepository>();
 
             // Assert
@@ -36,53 +47,53 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
         }
 
         [Fact]
-        public void Requesting_generic_repositories_of_different_entities_returns_different_instances()
+        public void Requesting_idrepositories_of_different_entities_returns_different_instances()
         {
             // Act
-            var actualStreetRepo = _sut.GetGenericRepository<Address>();
-            var actualAddressRepo = _sut.GetGenericRepository<Individual>();
+            var actualStreetRepo = _sut.GetIdRepository<Address>();
+            var actualAddressRepo = _sut.GetIdRepository<Individual>();
 
             // Assert
             actualStreetRepo.Should().NotBeSameAs(actualAddressRepo);
         }
 
         [Fact]
-        public void Requesting_generic_Repository_multiple_times_returns_same_instance()
+        public void Requesting_idrepository_multiple_times_returns_same_instance()
         {
             // Act
-            var actualIndRepo1 = _sut.GetGenericRepository<Address>();
-            var actualIndRepo2 = _sut.GetGenericRepository<Address>();
+            var actualIndRepo1 = _sut.GetIdRepository<Address>();
+            var actualIndRepo2 = _sut.GetIdRepository<Address>();
 
             // Assert
             actualIndRepo1.Should().BeSameAs(actualIndRepo2);
         }
 
         [Fact]
-        public void Requesting_generic_Repository_with_specific_implementation_returns_implementation()
+        public void Requesting_idrepository_with_specific_implementation_returns_implementation()
         {
             // Act
-            var actualIndRepo = _sut.GetGenericRepository<Individual>();
+            var actualIndRepo = _sut.GetIdRepository<Individual>();
 
             // Assert
             actualIndRepo.Should().BeOfType<IndividualRepository>();
         }
 
         [Fact]
-        public void Requesting_generic_Repository_without_specific_implementation_returns_core_repository()
+        public void Requesting_idrepository_without_specific_implementation_returns_core_repository()
         {
             // Act
-            var actualIndRepo = _sut.GetGenericRepository<Address>();
+            var actualIndRepo = _sut.GetIdRepository<Address>();
 
             // Assert
-            actualIndRepo.Should().BeOfType<CoreRepository<Address>>();
+            actualIndRepo.Should().BeOfType<IdCoreRepository<Address>>();
         }
 
         [Fact]
-        public void Requesting_normal_and_generic_repository_returns_same_instance()
+        public void Requesting_normal_and_idrepository_returns_same_instance()
         {
             // Act
             var actualIndRepo1 = _sut.GetRepository<IIndividualRepository>();
-            var actualIndRepo2 = _sut.GetGenericRepository<Individual>();
+            var actualIndRepo2 = _sut.GetIdRepository<Individual>();
 
             // Assert
             actualIndRepo1.Should().BeSameAs(actualIndRepo2);
@@ -107,7 +118,8 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
             var uowFactory = container.GetInstance<IUnitOfWorkFactory>();
             var sut = uowFactory.Create();
             var indRepo = sut.GetRepository<IIndividualRepository>();
-            var addressRepo = sut.GetGenericRepository<Address>();
+            var addressRepo = sut.GetIdRepository<Address>();
+            var currencyRepo = sut.GetCodeRepository<Currency>();
 
             // Act
             var individual = TestDataFactory.CreateIndividual();
@@ -119,8 +131,15 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
                 Individual = TestDataFactory.CreateIndividual()
             };
 
+            var currency = new Currency
+            {
+                Code = "CHF",
+                Description = "Swiss francs"
+            };
+
             await indRepo.UpsertAsync(individual);
             await addressRepo.UpsertAsync(address);
+            await currencyRepo.InsertAsync(currency);
 
             await sut.SaveAsync();
 
@@ -128,13 +147,16 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.UnitOfWorks
             var uowFactory2 = container.GetInstance<IUnitOfWorkFactory>();
             var sut2 = uowFactory2.Create();
             var indRepo2 = sut2.GetRepository<IIndividualRepository>();
-            var addressRepo2 = sut2.GetGenericRepository<Address>();
+            var addressRepo2 = sut2.GetIdRepository<Address>();
+            var currencyRepo2 = sut2.GetCodeRepository<Currency>();
 
-            var actualIndividuals = await indRepo2.LoadAsync(qry => qry.Where(f => f.FirstName == individual.FirstName));
-            var actualAddresses = await addressRepo2.LoadAsync(qry => qry.Where(f => f.City == address.City));
+            var actualIndividuals = await indRepo2.LoadAsync(qry => qry.Where(f => f.FirstName == individual.FirstName).ToListAsync());
+            var actualAddresses = await addressRepo2.LoadAsync(qry => qry.Where(f => f.City == address.City).ToListAsync());
+            var actualCurrencies = await currencyRepo2.LoadAsync(qry => qry.Where(f => f.Code == currency.Code).ToListAsync());
 
             actualIndividuals.Count.Should().Be(1);
             actualAddresses.Count.Should().Be(1);
+            actualCurrencies.Count.Should().Be(1);
         }
     }
 }

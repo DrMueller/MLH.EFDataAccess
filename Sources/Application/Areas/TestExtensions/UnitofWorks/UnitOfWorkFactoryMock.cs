@@ -1,4 +1,4 @@
-﻿using Mmu.Mlh.EfDataAccess.Areas.Entities;
+﻿using Mmu.Mlh.EfDataAccess.Areas.Data.Entities.Base;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
 using Moq;
@@ -19,11 +19,20 @@ namespace Mmu.Mlh.EfDataAccess.Areas.TestExtensions.UnitofWorks
 
         public IUnitOfWorkFactory Object => _uowFactoryMock.Object;
 
-        public Mock<IRepository<TEntity>> RegisterGenericRepoMock<TEntity>()
-            where TEntity : EntityBase
+        public Mock<ICodeRepository<TEntity>> RegisterCodeRepoMock<TEntity>()
+            where TEntity : CodeEntity
         {
-            var mock = new Mock<IRepository<TEntity>>();
-            _uowMock.Setup(f => f.GetGenericRepository<TEntity>()).Returns(mock.Object);
+            var mock = new Mock<ICodeRepository<TEntity>>();
+            _uowMock.Setup(f => f.GetCodeRepository<TEntity>()).Returns(mock.Object);
+
+            return mock;
+        }
+
+        public Mock<IIdRepository<TEntity>> RegisterIdRepoMock<TEntity>()
+            where TEntity : IdEntity
+        {
+            var mock = new Mock<IIdRepository<TEntity>>();
+            _uowMock.Setup(f => f.GetIdRepository<TEntity>()).Returns(mock.Object);
 
             return mock;
         }

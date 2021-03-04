@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
-using Mmu.Mlh.EfDataAccess.Areas.Entities;
+using Mmu.Mlh.EfDataAccess.Areas.Data.Entities.Base;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Factories;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.Querying.Implementation
 {

@@ -5,8 +5,8 @@ using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories
 {
-    public interface IIndividualRepository : IIdRepository<Individual>
+    public interface ICountryRepository : ICodeRepository<Country>
     {
-        Task<IReadOnlyCollection<Individual>> LoadFirst10Async();
+        Task<IReadOnlyCollection<Country>> LoadFirst10Async();
     }
 }

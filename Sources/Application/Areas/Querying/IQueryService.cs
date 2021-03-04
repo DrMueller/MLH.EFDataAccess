@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Mmu.Mlh.EfDataAccess.Areas.Entities;
+using Mmu.Mlh.EfDataAccess.Areas.Data.Entities.Base;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.Querying
 {

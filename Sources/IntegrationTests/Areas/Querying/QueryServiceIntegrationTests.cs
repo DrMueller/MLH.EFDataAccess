@@ -5,7 +5,7 @@ using Lamar;
 using Microsoft.EntityFrameworkCore;
 using Mmu.Mlh.EfDataAccess.Areas.Querying;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
 using Xunit;
@@ -29,7 +29,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Querying
             // Arrange
             var uowFactory = _container.GetInstance<IUnitOfWorkFactory>();
             var uow = uowFactory.Create();
-            var indRepo = uow.GetGenericRepository<Individual>();
+            var indRepo = uow.GetIdRepository<Individual>();
             var individual = TestDataFactory.CreateIndividual();
 
             await indRepo.UpsertAsync(individual);
@@ -49,7 +49,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Querying
             // Arrange
             var uowFactory = _container.GetInstance<IUnitOfWorkFactory>();
             var uow = uowFactory.Create();
-            var indRepo = uow.GetGenericRepository<Individual>();
+            var indRepo = uow.GetIdRepository<Individual>();
             var individual = TestDataFactory.CreateIndividual();
 
             await indRepo.UpsertAsync(individual);

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Contexts;
 
 namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts
 {
@@ -9,7 +9,6 @@ namespace Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.DbContexts.Contexts
             : base(options)
         {
             ChangeTracker.LazyLoadingEnabled = false;
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

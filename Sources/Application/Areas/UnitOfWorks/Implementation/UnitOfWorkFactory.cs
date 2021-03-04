@@ -1,5 +1,5 @@
 ﻿using Lamar;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Factories;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Implementation
 {

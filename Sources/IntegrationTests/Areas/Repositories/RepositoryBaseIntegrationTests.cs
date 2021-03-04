@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mmu.Mlh.EfDataAccess.Areas.Querying;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 using Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks;
-using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Entities;
+using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Data.Entities;
 using Mmu.Mlh.EfDataAccess.FakeApp.Areas.DataAccess.Repositories;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.Data;
 using Mmu.Mlh.EfDataAccess.IntegrationTests.Infrastructure.DependencyInjection;
@@ -36,7 +36,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
@@ -49,10 +49,10 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
                 var actualInds = await indRepo.LoadAsync(
                     qry =>
-                        qry.Where(f => f.FirstName == individual.FirstName));
+                        qry.SingleAsync(f => f.FirstName == individual.FirstName));
 
                 // Assert
-                actualInds.Single().Addresses.Should().BeNull();
+                actualInds.Addresses.Should().BeNull();
             }
         }
 
@@ -64,7 +64,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
@@ -73,7 +73,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             // Act
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 var actualDtos = await indRepo.LoadAsync(
                     qry =>
@@ -84,7 +84,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
                                     FirstName = f.FirstName,
                                     LastName = f.LastName,
                                     IndividualId = f.Id
-                                }));
+                                }).ToListAsync());
 
                 // Assert
                 var actualDto = actualDtos.Single();
@@ -102,7 +102,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
@@ -111,12 +111,13 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             // Act
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 var actualIndIds = await indRepo.LoadAsync(
                     qry =>
                         qry.Where(f => f.FirstName == individual.FirstName)
-                            .Select(f => f.Id));
+                            .Select(f => f.Id)
+                            .ToListAsync());
 
                 // Assert
                 actualIndIds.Single().Should().Be(individual.Id);
@@ -145,7 +146,8 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
                 var actualInds = await indRepo.LoadAsync(
                     qry =>
-                        qry.Where(f => f.FirstName == individual1.FirstName));
+                        qry.Where(f => f.FirstName == individual1.FirstName)
+                            .ToListAsync());
 
                 // Assert
                 actualInds.Should().NotBeNull();
@@ -161,7 +163,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
             }
@@ -169,13 +171,14 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             // Act
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 var actualInds = await indRepo.LoadAsync(
                     qry =>
                         qry.Where(f => f.FirstName == individual.FirstName)
                             .Include(f => f.Addresses)
-                            .ThenInclude(f => f.Streets));
+                            .ThenInclude(f => f.Streets)
+                            .ToListAsync());
 
                 // Assert
                 var actualind = actualInds.Single();
@@ -227,7 +230,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
@@ -246,7 +249,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             using (var uow = _uowFactory.Create())
             {
                 adr.Streets.Add(TestDataFactory.CreateStreet());
-                var indRepo2 = uow.GetGenericRepository<Individual>();
+                var indRepo2 = uow.GetIdRepository<Individual>();
 
                 loadedIndividual.Addresses.Add(adr);
                 await indRepo2.UpsertAsync(loadedIndividual);
@@ -278,7 +281,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
             }
@@ -289,7 +292,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 loadedIndividual = await indRepo.LoadAsync(
                     qry =>
@@ -311,7 +314,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             // Assert
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 var actualIndividual = await indRepo.LoadAsync(
                     qry =>
@@ -339,7 +342,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
                 await indRepo.UpsertAsync(individual);
                 await uow.SaveAsync();
             }
@@ -347,7 +350,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             // Act
             using (var uow = _uowFactory.Create())
             {
-                var indRepo = uow.GetGenericRepository<Individual>();
+                var indRepo = uow.GetIdRepository<Individual>();
 
                 var actualInd = await indRepo.LoadAsync(
                     qry =>

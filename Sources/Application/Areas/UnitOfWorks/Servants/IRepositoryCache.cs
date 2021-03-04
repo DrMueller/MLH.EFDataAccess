@@ -1,5 +1,5 @@
 ﻿using System;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Contexts;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants

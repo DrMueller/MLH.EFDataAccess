@@ -3,10 +3,10 @@ using System.Collections.Concurrent;
 using System.Linq;
 using JetBrains.Annotations;
 using Lamar;
-using Mmu.Mlh.EfDataAccess.Areas.DbContexts;
+using Mmu.Mlh.EfDataAccess.Areas.DbContexts.Contexts;
 using Mmu.Mlh.EfDataAccess.Areas.Repositories;
-using Mmu.Mlh.EfDataAccess.Areas.Repositories.Implementation;
-using Mmu.Mlh.LanguageExtensions.Areas.Types.Maybes;
+using Mmu.Mlh.EfDataAccess.Areas.Repositories.Base;
+using Mmu.Mlh.LanguageExtensions.Areas.Types.FunctionsResults;
 
 namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
 {
@@ -25,10 +25,9 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
         public TRepo GetRepository<TRepo>(Type repositoryType, IAppDbContext dbContext)
             where TRepo : IRepository
         {
-            var maybeRepo = TryGettingRepository<TRepo>(repositoryType);
-            var repo = maybeRepo.Reduce(InitializeRepository<TRepo>(dbContext));
+            var getRepoResult = TryGettingRepository<TRepo>(repositoryType);
 
-            return repo;
+            return getRepoResult.IsSuccess ? getRepoResult.Value : InitializeRepository<TRepo>(dbContext);
         }
 
         private TRepo InitializeRepository<TRepo>(IAppDbContext dbContext)
@@ -38,7 +37,7 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
 
             if (!(repository is IRepositoryBase repoBase))
             {
-                throw new ArgumentException($"{nameof(TRepo)} does not implement RepositoryBase");
+                throw new ArgumentException($"{nameof(TRepo)} does not implement RepositoryBase.");
             }
 
             repoBase.Initialize(dbContext);
@@ -47,13 +46,13 @@ namespace Mmu.Mlh.EfDataAccess.Areas.UnitOfWorks.Servants.Implementation
             return repository;
         }
 
-        private Maybe<TRepo> TryGettingRepository<TRepo>(Type repositoryType)
+        private FunctionResult<TRepo> TryGettingRepository<TRepo>(Type repositoryType)
             where TRepo : IRepository
         {
             var cachedRepo = _repos.SingleOrDefault(f => repositoryType.IsAssignableFrom(f.Key));
             var castedRepo = (TRepo)cachedRepo.Value;
 
-            return Maybe.CreateFromNullable(castedRepo);
+            return castedRepo == null ? FunctionResult.CreateFailure<TRepo>() : FunctionResult.CreateSuccess(castedRepo);
         }
     }
 }
