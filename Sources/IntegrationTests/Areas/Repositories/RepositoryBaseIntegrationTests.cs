@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -237,11 +238,15 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
             }
 
             var queryService = _container.GetService<IQueryService>();
+
+            Debug.WriteLine("Before loadedIndividual");
             var loadedIndividual = await queryService.QuerySingleAsync<Individual>(
                 qry =>
                     qry.Include(f => f.Addresses)
                         .ThenInclude(f => f.Streets)
                         .SingleAsync(f => f.FirstName == individual.FirstName));
+
+            Debug.WriteLine("After loadedIndividual");
 
             var adr = TestDataFactory.CreateAddress();
 
