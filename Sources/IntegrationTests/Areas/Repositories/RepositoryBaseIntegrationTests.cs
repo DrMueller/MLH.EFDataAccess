@@ -288,7 +288,7 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
 
             // Act
             var newLastName = Guid.NewGuid().ToString();
-            Individual loadedIndividual = null;
+            Individual loadedIndividual;
 
             using (var uow = _uowFactory.Create())
             {
