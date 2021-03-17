@@ -237,16 +237,14 @@ namespace Mmu.Mlh.EfDataAccess.IntegrationTests.Areas.Repositories
                 await uow.SaveAsync();
             }
 
-            var queryService = _container.GetService<IQueryService>();
+            var queryService = _container.GetRequiredService<IQueryService>();
 
-            Debug.WriteLine("Before loadedIndividual");
             var loadedIndividual = await queryService.QuerySingleAsync<Individual>(
                 qry =>
                     qry.Include(f => f.Addresses)
                         .ThenInclude(f => f.Streets)
                         .SingleAsync(f => f.FirstName == individual.FirstName));
 
-            Debug.WriteLine("After loadedIndividual");
 
             var adr = TestDataFactory.CreateAddress();
 
